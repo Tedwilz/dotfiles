@@ -1,0 +1,313 @@
+// -*- mode: jsonc -*-
+{
+    "layer": "top", // Waybar at top layer
+    "position": "bottom", // (top|bottom|left|right)
+    "height": 22, // height (to be removed for auto height)
+    // "width": 1280, // Waybar width
+    "spacing": 0, // Gaps between modules (4px)
+    // Choose the order of the modules
+    "modules-left": [
+        "custom/swaync",
+        "hyprland/workspaces",
+        //"hyprland/scratchpad",
+        //"hyprland/window"
+        "hyprland/submap"
+        //"wlr/taskbar"
+    ],
+    "modules-center": [
+    ],
+    "modules-right": [
+        //"mpd",
+        "tray",
+        "idle_inhibitor",
+        "pulseaudio",
+        //"network",
+        //"power-profiles-daemon",
+        "group/performance",
+        "battery",
+        "hyprland/language",
+        "clock"
+    ],
+    // Modules configuration
+    "hyprland/workspaces": {
+        "active-only": false,
+        "all-outputs": true,
+        "disable-scroll": true,
+        "warp-on-scroll": false,
+        "on-click": "activate",
+        "height": 0,
+        "format": "{name} {windows}",
+        "format-window-separator": " ",
+        "window-rewrite-default": "",
+        "window-rewrite": {
+            "title<.*youtube.*>": "",
+            "class<firefox>": "󰈹", 
+            "class<firefox> title<.*github.*>": "", 
+            // Windows that contain "foot" in either class or title. For optimization reasons, it will only match against a title if at least one other window explicitly matches against a title.
+            "foot": "", 
+            "class<com.mitchellh.ghostty>": "",
+            "class<steam>": "",
+            "class<discord>": "",
+            "class<neovim>": "",
+            "class<vim>": "",
+            "class<thunar>": "",
+            "class<obsidian>": "󰅍",
+            "code": "󰨞",
+            "title<.* - (.*) - VSCodium>": "codium $1"  // captures part of the window title and formats it into output
+        }
+     },
+    "hyprland/mode": {
+        "format": "<span style=\"italic\">{}</span>"
+    },
+    "hyprland/scratchpad": {
+        "format": "{icon} {count}",
+        "show-empty": false,
+        "format-icons": ["", ""],
+        "tooltip": true,
+        "tooltip-format": "{app}: {title}"
+    },
+    "group/performance": {
+      "orientation": "horizontal",
+      "modules": [
+        "group/performance#1",
+        "group/performance#2"
+      ]
+    },
+    "group/performance#1": {
+      "orientation": "vertical",
+      "modules": [
+        "cpu",
+        "temperature"
+      ]
+    },
+    "group/performance#2": {
+      "orientation": "vertical",
+      "modules": [
+        "memory",
+        "disk"
+      ]
+    },
+    "wlr/taskbar": {
+      "icon-size": 15,
+      "on-click": "activate",
+      "format": "{icon}"
+    },
+    "custom/weather": {
+        "exec": "curl 'https://wttr.in/?format=1'",
+        "interval": 3600,
+        "format": "{}",
+        "tooltip": true
+    },
+        "custom/updates": {
+        "format": "󰚰 {}",
+        "exec": "checkupdates | wc -l",
+        "interval": 3600,
+        "on-click": "ghostty -e sudo pacman -Syu",
+        "signal": 8
+    },
+    "hyprland/window": {
+	    "format": "{title}",
+	    "max-length": 333,
+	    "separate-outputs": true
+    },
+    "keyboard-state": {
+        "numlock": true,
+        "capslock": true,
+        "format": "{name} {icon}",
+        "format-icons": {
+            "locked": "",
+            "unlocked": ""
+        }
+    },
+    "mpd": {
+        "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",
+        "format-disconnected": "Disconnected ",
+        "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
+        "unknown-tag": "N/A",
+        "interval": 5,
+        "consume-icons": {
+            "on": " "
+        },
+        "random-icons": {
+            "off": "<span color=\"#f53c3c\"></span> ",
+            "on": " "
+        },
+        "repeat-icons": {
+            "on": " "
+        },
+        "single-icons": {
+            "on": "1 "
+        },
+        "state-icons": {
+            "paused": "",
+            "playing": ""
+        },
+        "tooltip-format": "MPD (connected)",
+        "tooltip-format-disconnected": "MPD (disconnected)"
+    },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": " ",
+            "deactivated": " "
+        }
+    },
+    "tray": {
+        "format": "{icon}",
+        "icon-size": 18,
+        "spacing": 5
+    },
+    "clock": {
+        // "timezone": "America/New_York",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format-alt": "{:%d.%m.%Y}"
+    },
+    "cpu": {
+        "format": "{usage}% ",
+        "tooltip": false,
+        "interval": 1,
+        "on-click": "ghostty -e htop"
+    },
+    "memory": {
+        "format": "{}% ",
+        "interval": 1,
+        "on-click": "ghostty -e htop"
+    },
+    "disk": {
+        "interval": 30,
+        "format": "{percentage_used}% 󰗮",
+        "tooltip": true,
+        "unit": "GB",
+        "tooltip-format": "{specific_free:0.2f} GB out of {specific_total:0.2f} GB available.",
+        "path": "/",
+        "on-click": "ghostty -e gdu /"
+    },
+    "temperature": {
+        // "thermal-zone": 2,
+        "hwmon-path": "/sys/class/hwmon/hwmon4/temp1_input",
+        "critical-threshold": 80,
+        "format": "{temperatureC}°C {icon}",
+        "format-icons": ["", "", ""],
+        "interval": 1,
+        "on-click": "ghostty -e s-tui"
+    },
+    "backlight": {
+        // "device": "acpi_video1",
+        "format": "{percent}% {icon}",
+        "format-icons": ["", "", "", "", "", "", "", "", ""]
+    },
+    "battery": {
+        "states": {
+            "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{capacity}% {icon}",
+        "format-full": "{capacity}% {icon}",
+        "format-charging": "{capacity}% ",
+        "format-plugged": "{capacity}% ",
+        "format-alt": "{time} {icon}",
+        // "format-good": "", // An empty format will hide the module
+        // "format-full": "",
+        "format-icons": ["", "", "", "", ""],
+        "interval": 1
+    },
+    "power-profiles-daemon": {
+      "format": "{icon}",
+      "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+      "tooltip": true,
+      "format-icons": {
+        "default": "",
+        "performance": "",
+        "balanced": "",
+        "power-saver": ""
+      }
+    },
+    "network": {
+        // (Optional) To force the use of this interface
+        // "interface": "wlp2*", 
+        "format-wifi": "{essid} ({signalStrength}%) ",
+        "format-ethernet": "{ipaddr}/{cidr} ",
+        "tooltip-format": "{ifname} via {gwaddr} ",
+        "format-linked": "{ifname} (No IP) ",
+        "format-disconnected": "Disconnected ⚠",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+        //"on-click": "nm-connection-editor"
+    },
+    "pulseaudio": {
+        "scroll-step": 1, // %, can be a float
+        "format": "{volume}% {icon} {format_source}",
+        "format-bluetooth": "{volume}% {icon} {format_source}",
+        "format-bluetooth-muted": " {icon} {format_source}",
+        "format-muted": " {format_source}",
+        "format-source": " ",
+        "format-source-muted": "  ",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        },
+        "on-click": "pavucontrol",
+        "input": true
+    },
+    "hyprland/language": {
+	"format": "  {} ",
+	"min-length": 6,
+	"format-en": "US",
+	"format-cs": "CZ",
+	"on-click": "hyprctl switchxkblayout at-translated-set-2-keyboard next"
+    },
+    "custom/poweroff": {
+		"format": " ",
+        "tooltip": "Power Off",
+		"on-click": "systemctl poweroff",
+  		"interval": 3600
+    },
+	"custom/reboot": {
+		"format": " ",
+        "tooltip": "reboot",
+		"on-click": "reboot",
+  		"interval": 3600
+    },
+	"custom/lock": {
+		"format": "  ",
+        "tooltip": "lock",
+		"on-click": "hyprlock",
+  		"interval": 3600
+    },
+    "custom/swaync": {
+		"format": "󰣇",
+        "tooltip": "notification center",
+		"on-click": "swaync-client -t -sw",
+  		"interval": 3600
+    }
+}
+//    "custom/media": {
+//        "format": "{icon} {text}",
+//        "return-type": "json",
+//        "max-length": 40,
+//        "format-icons": {
+//            "spotify": "",
+//            "default": "🎜"
+//        },
+//        "escape": true,
+//        "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
+        // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+
+//    "custom/power": {
+//        "format" : "⏻ ",
+//		"tooltip": false,
+//		"menu": "on-click",
+//        // Menu file in resources folder
+//		"menu-file": "$HOME/.config/waybar/power_menu.xml", 
+//		"menu-actions": {
+//			"shutdown": "shutdown",
+//			"reboot": "reboot",
+//			"suspend": "systemctl suspend",
+//			"hibernate": "systemctl hibernate"
+//		}
+//    }
