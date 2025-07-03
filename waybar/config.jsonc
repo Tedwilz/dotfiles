@@ -20,6 +20,7 @@
         //"mpd",
         "tray",
         "idle_inhibitor",
+        "custom/updates",
         "pulseaudio",
         //"network",
         //"power-profiles-daemon",
@@ -98,12 +99,12 @@
         "format": "{}",
         "tooltip": true
     },
-        "custom/updates": {
+    "custom/updates": {
         "format": "󰚰 {}",
-        "exec": "checkupdates | wc -l",
+        "exec": "echo $(checkupdates | wc -l)'|'$(yay -Qua | wc -l)",
         "interval": 3600,
-        "on-click": "ghostty -e sudo pacman -Syu",
-        "signal": 8
+        "signal": 8,
+        "on-click": "pkill -RTMIN+8 waybar"
     },
     "hyprland/window": {
 	    "format": "{title}",
